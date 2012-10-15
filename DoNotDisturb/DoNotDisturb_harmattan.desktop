@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Terminal=false
+Name=DoNotDisturb
+Name[zh]=勿扰模式
+Name[zh_HK]=勿擾模式
+Name[zh_TW]=勿擾模式
+Exec=/usr/bin/invoker --splash=/opt/DoNotDisturb/qml/DoNotDisturb/splash.png --type=d -s /opt/DoNotDisturb/bin/DoNotDisturb
+Icon=/usr/share/icons/hicolor/80x80/apps/DoNotDisturb80.png
+X-Window-Icon=
+X-HildonDesk-ShowInToolbar=true
+X-Osso-Type=application/x-executable

@@ -1,0 +1,56 @@
+PopupItem {
+	id: weekdaysItem
+	MultiSelectionDialog {
+		id: mSelectDlg
+		titleText: weekdaysItem.text
+		platformStyle: SelectionDialogStyle{
+			itemSelectedBackgroundColor: '#2A8EE0'
+		}
+		model: ListModel {
+			ListElement { name: "Monday" }
+			ListElement { name: "Tuesday" }
+			ListElement { name: "Wednesday" }
+			ListElement { name: "Thursday" }
+			ListElement { name: "Friday" }
+			ListElement { name: "Saturday" }
+			ListElement { name: "Sunday" }
+		}
+
+		acceptButtonText: qsTr("Ok")
+		onAccepted: {
+			if (!selectedIndexes.length) {
+				weekdaysItem.describe = "";
+				return;
+			}
+
+			if (selectedIndexes.length == 7) {
+				weekdaysItem.describe = qsTr("Everyday");
+				return;
+			}
+
+			weekdaysItem.describe = selectedIndexes[0] + 1;
+			for (var i = 1; i < selectedIndexes.length; i++) {
+				weekdaysItem.describe += ",";
+				weekdaysItem.describe += (selectedIndexes[i] + 1);
+			}
+		}
+		Component.onCompleted: {
+			var ret = [];
+			if (weekdaysItem.describe) {
+				var tmp = weekdaysItem.describe.split(",");
+				for (var i = 0; i < tmp.length; i++ ) {
+					ret.push(parseInt(tmp[i])-1);
+				}
+			}
+			selectedIndexes = ret;
+		}
+	}
+
+	describe: setting.getWeekDays()
+	width: parent.width
+	text: qsTr("Weekdays")
+	onItemClick: mSelectDlg.open()
+	onDescribeChanged: {
+		setting.setWeekDays(describe);
+	}
+}
