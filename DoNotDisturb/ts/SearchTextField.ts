@@ -4,7 +4,7 @@
 <context>
     <name>SearchTextField</name>
     <message>
-        <location filename="../SearchTextField.qml" line="18"/>
+        <location filename="SearchTextField.qml" line="18"/>
         <source>Finish</source>
         <translation type="unfinished"></translation>
     </message>

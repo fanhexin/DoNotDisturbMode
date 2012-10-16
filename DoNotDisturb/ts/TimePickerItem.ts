@@ -4,12 +4,12 @@
 <context>
     <name>TimePickerItem</name>
     <message>
-        <location filename="../TimePickerItem.qml" line="14"/>
+        <location filename="TimePickerItem.qml" line="14"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../TimePickerItem.qml" line="15"/>
+        <location filename="TimePickerItem.qml" line="15"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>

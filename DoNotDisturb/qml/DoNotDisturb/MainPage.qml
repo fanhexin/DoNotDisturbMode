@@ -32,7 +32,7 @@ Page {
 
             LabelItem {
                 width: parent.width
-                text: qsTr("When Do Not Disturb is enabled calls and alerts that arrive will be silenced.")
+                text: qsTr("When Do Not Disturb is enabled calls that arrive will be silenced.")
             }
 
             SpacingItem {}

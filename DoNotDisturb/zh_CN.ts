@@ -38,8 +38,8 @@
     </message>
     <message>
         <location filename="../MainPage.qml" line="35"/>
-        <source>When Do Not Disturb is enabled calls and alerts that arrive will be silenced.</source>
-        <translation type="unfinished">“勿扰模式”启用后，来电和提醒将被设为静音。</translation>
+        <source>When Do Not Disturb is enabled calls that arrive will be silenced.</source>
+        <translation type="unfinished">“勿扰模式”启用后，来电将被设为静音。</translation>
     </message>
     <message>
         <location filename="../MainPage.qml" line="42"/>

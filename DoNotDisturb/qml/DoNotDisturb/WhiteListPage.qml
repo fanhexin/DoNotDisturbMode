@@ -20,18 +20,35 @@ Page {
         ToolIcon {
             iconId: "toolbar-add"
             onClicked: {
-//                var tmp = Qt.createComponent("./ContactsPicker.qml");
-//                var sheet = tmp.createObject(app, {
-//                                                 wlModel: wlContactsModel
-//                                             });
-
-//                sheet.open();
                 if (contactsListModel.count) {
                     for (var i = 0; i < contactsListModel.count; i++) {
                         contactsListModel.get(i).bSelect = false;
                     }
                 }
-                contactPicker.open();
+
+                var tmp = Qt.createComponent("./ContactsPicker.qml");
+                var sheet = tmp.createObject(me);
+                sheet.accepted.connect(function() {
+                                           var wlnumbers = "";
+                                           for (var i = 0; i < contactsListModel.count; i++) {
+                                               if (contactsListModel.get(i).bSelect) {
+                                                   if (!check(contactsListModel.get(i).id))
+                                                       continue;
+                                                   wlListView.model.append(contactsListModel.get(i));
+                                                   DATA.wl_insert([
+                                                                      contactsListModel.get(i).id,
+                                                                      contactsListModel.get(i).name,
+                                                                      contactsListModel.get(i).imgUrl,
+                                                                      contactsListModel.get(i).number
+                                                                  ]);
+                                                   wlnumbers += ",";
+                                                   wlnumbers += contactsListModel.get(i).number;
+                                               }
+                                           }
+                                           updateWhiteList();
+
+                                       });
+                sheet.open();
             }
         }
 
@@ -69,38 +86,6 @@ Page {
             }
         }
     }
-
-    ContactsPicker {
-        id: contactPicker
-        onAccepted: {
-            var wlnumbers = "";
-            for (var i = 0; i < contactsListModel.count; i++) {
-                if (contactsListModel.get(i).bSelect) {
-                    if (!check(contactsListModel.get(i).id))
-                        continue;
-                    wlListView.model.append(contactsListModel.get(i));
-                    DATA.wl_insert([
-                                       contactsListModel.get(i).id,
-                                       contactsListModel.get(i).name,
-                                       contactsListModel.get(i).imgUrl,
-                                       contactsListModel.get(i).number
-                                   ]);
-                    wlnumbers += ",";
-                    wlnumbers += contactsListModel.get(i).number;
-                }
-            }
-            updateWhiteList();
-        }
-
-        function check(id) {
-            for (var j = 0; j < whiteListModel.count; j++) {
-                if (whiteListModel.get(j).id == id)
-                    return false;
-            }
-            return true;
-        }
-    }
-
 
     Header {
         id: header
@@ -216,18 +201,12 @@ Page {
         flickableItem: wlListView
     }
 
-    Component.onCompleted: {
-        if (wlListView.model.count)
-            return;
-
-        DATA.wl_get(function(item) {
-                     wlListView.model.append({
-                                                 id: item.id,
-                                                 name: item.name,
-                                                 imgUrl: item.imgUrl,
-                                                 number: item.number
-                                             });
-                 });
+    function check(id) {
+        for (var j = 0; j < whiteListModel.count; j++) {
+            if (whiteListModel.get(j).id == id)
+                return false;
+        }
+        return true;
     }
 
     function updateWhiteList() {

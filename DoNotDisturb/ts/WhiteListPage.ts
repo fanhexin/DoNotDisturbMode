@@ -4,27 +4,27 @@
 <context>
     <name>WhiteListPage</name>
     <message>
-        <location filename="../WhiteListPage.qml" line="35"/>
+        <location filename="WhiteListPage.qml" line="43"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WhiteListPage.qml" line="37"/>
+        <location filename="WhiteListPage.qml" line="45"/>
         <source>Would you like to empty the list?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WhiteListPage.qml" line="54"/>
+        <location filename="WhiteListPage.qml" line="63"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WhiteListPage.qml" line="71"/>
+        <location filename="WhiteListPage.qml" line="108"/>
         <source>Allow Calls From</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WhiteListPage.qml" line="174"/>
+        <location filename="WhiteListPage.qml" line="207"/>
         <source>No Contacts</source>
         <translation type="unfinished"></translation>
     </message>

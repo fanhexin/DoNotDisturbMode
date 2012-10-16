@@ -25,6 +25,20 @@ PageStackWindow {
 
     Component.onCompleted: {
         DATA.init();
+
+        var numberList = "";
+        DATA.wl_get(function(item) {
+                     whiteListModel.append({
+                                                 id: item.id,
+                                                 name: item.name,
+                                                 imgUrl: item.imgUrl,
+                                                 number: item.number
+                                             });
+                        numberList += (item.number + ",");
+                 });
+        numberList = numberList.substring(0, numberList.length-1);
+        console.log(numberList);
+        setting.setWhiteList(numberList);
     }
 
     function show_info_bar(text) {

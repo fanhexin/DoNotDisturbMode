@@ -100,14 +100,14 @@ bool CallWatchdog::isInTimeRange()
 {
     QTime currentTime = QTime::currentTime();
     if (m_startTime < m_endTime) {
-        if (currentTime < m_startTime || currentTime > m_endTime)
-            return false;
+        if (currentTime >= m_startTime && currentTime <= m_endTime)
+            return true;
     }else {
-        if (currentTime > m_startTime && currentTime < m_endTime)
-            return false;
+        if (currentTime >= m_startTime || currentTime <= m_endTime)
+            return true;
     }
 
-    return true;
+    return false;
 }
 
 bool CallWatchdog::isInWhiteList(const QString &number)
@@ -220,7 +220,7 @@ void CallWatchdog::loadSetting()
     }
 
     m_bRepeatedCall = setting.value("repeatedCall", false).toBool();
-    m_whiteList = setting.value("whiteList", QStringList()).toStringList();
+    m_whiteList = setting.value("whiteList", QString()).toString().split(",");
 
 //    m_weekDays = setting.value("weekDays", "").toString().split(",");
     m_startTime = QTime::fromString(setting.value("startTime", "00:00").toString(), "hh:mm");

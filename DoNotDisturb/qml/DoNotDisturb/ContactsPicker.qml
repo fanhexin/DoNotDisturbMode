@@ -61,7 +61,7 @@ Sheet {
             platformStyle: BusyIndicatorStyle { size: "large" }
             anchors.centerIn: parent
             running: spinner.visible
-            visible: !contactListView.model.count
+            visible: !contactsListModel.count
         }
 
         ListModel {

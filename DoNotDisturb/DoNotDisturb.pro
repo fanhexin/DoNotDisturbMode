@@ -44,12 +44,16 @@ HEADERS += \
     contacts.h \
     setting.h
 
-TRANSLATIONS += zh_CN.ts
+TRANSLATIONS += zh_CN.ts zh_HK.ts zh_TW.ts
 OTHER_FILES += zh_CN.ts\
-               zh_CN.qm
+               zh_CN.qm\
+               zh_HK.ts\
+               zh_HK.qm\
+               zh_TW.ts\
+               zh_TW.qm
 
 unix: {
-    translation.files = zh_CN.ts zh_CN.qm
+    translation.files = zh_CN.ts zh_CN.qm zh_HK.ts zh_HK.qm zh_TW.ts zh_TW.qm
     translation.path = /opt/DoNotDisturb/lang
     INSTALLS += translation
 }
