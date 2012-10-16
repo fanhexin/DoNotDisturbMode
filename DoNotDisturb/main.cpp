@@ -28,7 +28,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     viewer.showExpanded();
 
     int ret = app->exec();
-    ct.save();
     st.save();
 
     QDBusInterface iface(DAEMON_BUS_NAME, DAEMON_BUS_PATH, DAEMON_INSTANCE_INTERFACE);

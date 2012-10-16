@@ -19,6 +19,7 @@ void Setting::save()
 //    setting.setValue("weekDays", m_weekDays);
     setting.setValue("startTime", m_startTime);
     setting.setValue("endTime", m_endTime);
+    setting.setValue("whiteList", m_whiteList);
 }
 
 bool Setting::getActive()
@@ -69,6 +70,11 @@ QString Setting::getEndTime()
 void Setting::setEndTime(const QString &t)
 {
     m_endTime = t;
+}
+
+void Setting::setWhiteList(const QString &wl)
+{
+    m_whiteList = wl;
 }
 
 

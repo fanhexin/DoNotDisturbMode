@@ -1,9 +1,10 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 import com.nokia.extras 1.0
+import "./Data.js" as DATA
 
 PageStackWindow {
-    id: appWindow
+    id: app
 
     initialPage: MainPage{}
 
@@ -12,6 +13,18 @@ PageStackWindow {
         topMargin: 40
         timerShowTime: 2*1000
         z: 1
+    }
+
+    ListModel {
+        id: contactsListModel
+    }
+
+    ListModel {
+        id: whiteListModel
+    }
+
+    Component.onCompleted: {
+        DATA.init();
     }
 
     function show_info_bar(text) {

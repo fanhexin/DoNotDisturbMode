@@ -29,6 +29,8 @@ public slots:
 
     QString getEndTime();
     void setEndTime(const QString &t);
+
+    void setWhiteList(const QString &wl);
     
 private:
     bool m_bActive;
@@ -36,6 +38,7 @@ private:
     QString m_weekDays;
     QString m_startTime;
     QString m_endTime;
+    QString m_whiteList;
 };
 
 #endif // SETTING_H

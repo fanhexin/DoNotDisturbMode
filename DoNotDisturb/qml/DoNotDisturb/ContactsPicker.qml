@@ -5,7 +5,6 @@ import "./UIConstants.js" as UI
 
 Sheet {
     id: me
-    property ListModel wlModel
 
     acceptButtonText: qsTr("Ok")
     rejectButtonText: qsTr("Cancel")
@@ -30,13 +29,13 @@ Sheet {
                     searchRetModel.clear();
 
                     if (!text) {
-                        contactListView.model = contactModel;
+                        contactListView.model = contactsListModel;
                         return;
                     }
 
-                    for (var i = 0; i < contactModel.count; i++) {
-                        if (!contactModel.get(i).name.indexOf(text)) {
-                            var tmp = contactModel.get(i);
+                    for (var i = 0; i < contactsListModel.count; i++) {
+                        if (!contactsListModel.get(i).name.indexOf(text)) {
+                            var tmp = contactsListModel.get(i);
                             tmp.recoverIndex = i;
                             searchRetModel.append(tmp);
                         }
@@ -61,15 +60,12 @@ Sheet {
             id: spinner
             platformStyle: BusyIndicatorStyle { size: "large" }
             anchors.centerIn: parent
-            running: true
+            running: spinner.visible
+            visible: !contactListView.model.count
         }
 
         ListModel {
             id: searchRetModel
-        }
-
-        ListModel{
-            id: contactModel
         }
 
         ListView {
@@ -82,7 +78,7 @@ Sheet {
             }
 
             clip: true
-            model: contactModel
+            model: contactsListModel
             delegate: Component {
                 Item {
                     width: parent.width
@@ -174,7 +170,7 @@ Sheet {
      //       }
             function sync_model() {
                 for (var i = 0; i < searchRetModel.count; i++) {
-                    contactModel.get(searchRetModel.get(i).recoverIndex).bSelect = searchRetModel.get(i).bSelect;
+                    contactsListModel.get(searchRetModel.get(i).recoverIndex).bSelect = searchRetModel.get(i).bSelect;
                 }
             }
         }
@@ -182,44 +178,28 @@ Sheet {
         ScrollDecorator {
             flickableItem: contactListView
         }
-
-        function load() {
-            var ret = contacts.getAll();
-            for (var i = 0; i < ret.length; i++) {
-                contactModel.append(ret[i]);
-            }
-
-            spinner.running = false;
-            spinner.visible = false;
-            if (!contactModel.count)
-                blankscreentext.visible = true;
-        }
-    }
-
-    onAccepted: {
-        var wlId = [];
-        for (var i = 0; i < contactModel.count; i++) {
-            if (contactModel.get(i).bSelect) {
-                if (!check(contactModel.get(i).id))
-                    continue;
-                wlModel.append(contactModel.get(i));
-                wlId.push(contactModel.get(i).id);
-            }
-        }
-        contacts.addWhiteList(wlId);
-    }
-
-    function check(id) {
-        for (var j = 0; j < wlModel.count; j++) {
-            if (wlModel.get(j).id == id)
-                return false;
-        }
-        return true;
     }
 
     onStatusChanged: {
         if (status == 1) {
-            contactList.load();
+            if (contactListView.model.count) {
+                return;
+            }
+            load();
+        }
+    }
+
+    function load() {
+        var ret = contacts.getAll();
+        if (!ret.length) {
+            spinner.visible = false;
+            blankscreentext.visible = true;
+            return;
+        }
+
+        for (var i = 0; i < ret.length; i++) {
+            ret[i].bSelect = false;
+            contactListView.model.append(ret[i]);
         }
     }
 }

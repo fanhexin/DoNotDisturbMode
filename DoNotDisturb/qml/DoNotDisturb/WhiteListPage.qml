@@ -3,10 +3,12 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 import com.nokia.extras 1.0
 import "./UIConstants.js" as UI
+import "./Data.js" as DATA
 
 Page {
     id: me
     orientationLock: PageOrientation.LockPortrait
+
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "toolbar-back"
@@ -18,12 +20,18 @@ Page {
         ToolIcon {
             iconId: "toolbar-add"
             onClicked: {
-                var tmp = Qt.createComponent("./ContactsPicker.qml");
-                var sheet = tmp.createObject(me, {
-                                                 wlModel: wlContactsModel
-                                             });
+//                var tmp = Qt.createComponent("./ContactsPicker.qml");
+//                var sheet = tmp.createObject(app, {
+//                                                 wlModel: wlContactsModel
+//                                             });
 
-                sheet.open();
+//                sheet.open();
+                if (contactsListModel.count) {
+                    for (var i = 0; i < contactsListModel.count; i++) {
+                        contactsListModel.get(i).bSelect = false;
+                    }
+                }
+                contactPicker.open();
             }
         }
 
@@ -37,8 +45,9 @@ Page {
                                                content_text: qsTr("Would you like to empty the list?")
                                            });
                 dlg.accepted.connect(function() {
-                                         wlContactsModel.clear();
-                                         contacts.clearWhiteList();
+                                         wlListView.model.clear();
+                                         DATA.wl_clear();
+                                         updateWhiteList();
                                      });
                 dlg.open();
 
@@ -53,14 +62,42 @@ Page {
             MenuItem {
                 text: qsTr("Delete")
                 onClicked: {
-                    wlContactsModel.remove(del_menu.index);
-                    var tmp = [];
-                    for (var i = 0; i < wlContactsModel.count; i++) {
-                        tmp.push(wlContactsModel.get(i).id);
-                    }
-                    contacts.updateWhiteList(tmp);
+                    DATA.wl_del(wlListView.model.get(del_menu.index).id);
+                    wlListView.model.remove(del_menu.index);
+                    updateWhiteList();
                 }
             }
+        }
+    }
+
+    ContactsPicker {
+        id: contactPicker
+        onAccepted: {
+            var wlnumbers = "";
+            for (var i = 0; i < contactsListModel.count; i++) {
+                if (contactsListModel.get(i).bSelect) {
+                    if (!check(contactsListModel.get(i).id))
+                        continue;
+                    wlListView.model.append(contactsListModel.get(i));
+                    DATA.wl_insert([
+                                       contactsListModel.get(i).id,
+                                       contactsListModel.get(i).name,
+                                       contactsListModel.get(i).imgUrl,
+                                       contactsListModel.get(i).number
+                                   ]);
+                    wlnumbers += ",";
+                    wlnumbers += contactsListModel.get(i).number;
+                }
+            }
+            updateWhiteList();
+        }
+
+        function check(id) {
+            for (var j = 0; j < whiteListModel.count; j++) {
+                if (whiteListModel.get(j).id == id)
+                    return false;
+            }
+            return true;
         }
     }
 
@@ -69,10 +106,6 @@ Page {
         id: header
         color: UI.HEADER_COLOR
         content: qsTr("Allow Calls From")
-    }
-
-    ListModel {
-        id: wlContactsModel
     }
 
     ListView {
@@ -86,7 +119,7 @@ Page {
         }
 
         clip: true
-        model: wlContactsModel
+        model: whiteListModel
         delegate: Component {
             Item {
                 width: parent.width
@@ -174,7 +207,7 @@ Page {
             text: qsTr("No Contacts")
             font.pixelSize: 48
             opacity: 0.7
-            visible: !wlContactsModel.count
+            visible: !wlListView.model.count
             color: "black"
         }
     }
@@ -184,9 +217,28 @@ Page {
     }
 
     Component.onCompleted: {
-        var ret = contacts.getWhiteList();
-        for (var i = 0; i < ret.length; i++) {
-            wlContactsModel.append(ret[i]);
+        if (wlListView.model.count)
+            return;
+
+        DATA.wl_get(function(item) {
+                     wlListView.model.append({
+                                                 id: item.id,
+                                                 name: item.name,
+                                                 imgUrl: item.imgUrl,
+                                                 number: item.number
+                                             });
+                 });
+    }
+
+    function updateWhiteList() {
+        var tmp = "";
+        if (wlListView.model.count >= 1) {
+            tmp += wlListView.model.get(0).number
         }
+        for (var i = 1; i < wlListView.model.count; i++) {
+            tmp += ",";
+            tmp += wlListView.model.get(i).number;
+        }
+        setting.setWhiteList(tmp);
     }
 }
