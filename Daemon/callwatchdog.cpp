@@ -103,8 +103,9 @@ bool CallWatchdog::isInTimeRange()
         if (currentTime >= m_startTime && currentTime <= m_endTime)
             return true;
     }else {
-        if (currentTime >= m_startTime || currentTime <= m_endTime)
+        if (currentTime >= m_startTime || currentTime <= m_endTime) {
             return true;
+        }
     }
 
     return false;
@@ -220,7 +221,11 @@ void CallWatchdog::loadSetting()
     }
 
     m_bRepeatedCall = setting.value("repeatedCall", false).toBool();
-    m_whiteList = setting.value("whiteList", QString()).toString().split(",");
+
+    QString wlList = setting.value("whiteList", QString()).toString();
+    if (wlList.size()) {
+        m_whiteList = wlList.split(",");
+    }
 
 //    m_weekDays = setting.value("weekDays", "").toString().split(",");
     m_startTime = QTime::fromString(setting.value("startTime", "00:00").toString(), "hh:mm");
