@@ -124,9 +124,9 @@ void CallWatchdog::filter(const QDBusObjectPath &call, const QString &number)
 {
 //    if (!isInWeekRange())
 //        return;
-
-    if (!isInTimeRange())
+    if (!isInTimeRange()) {
         return;
+    }
 
     if (isRepeatedCall(number)) {
         return;
